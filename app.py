@@ -1,5 +1,7 @@
-import streamlit as st
 from models import cardio_predict
+import pandas as pd
+import streamlit as st
+features, target, X, Y, scaler, model, Y_pred, cr, cm = cardio_predict()
 
 st.header('Cardiovascular Disease Prediction System')
 st.subheader('Using Logistic Regression')
@@ -96,14 +98,31 @@ active = st.sidebar.radio(
     format_func=lambda x: 'No' if x == 0 else 'Yes'
 )
 
-st.write("Age:", age)
-st.write("Gender:", gender)
-st.write("Height:", height)
-st.write("Weight:", weight)
-st.write("Systolic BP (ap_hi):", ap_hi)
-st.write("Diastolic BP (ap_lo):", ap_lo)
-st.write("Cholesterol:", cholesterol)
-st.write("Glucose:", gluc)
-st.write("Smoking:", smoke)
-st.write("Alcohol Consumption:", alco)
-st.write("Physical Activity:", active)
+# st.write("Age:", age)
+# st.write("Gender:", gender)
+# st.write("Height:", height)
+# st.write("Weight:", weight)
+# st.write("Systolic BP (ap_hi):", ap_hi)
+# st.write("Diastolic BP (ap_lo):", ap_lo)
+# st.write("Cholesterol:", cholesterol)
+# st.write("Glucose:", gluc)
+# st.write("Smoking:", smoke)
+# st.write("Alcohol Consumption:", alco)
+# st.write("Physical Activity:", active)
+
+# Prediction 
+if st.button('predict cardio Disease'):
+    with st.spinner('predicting cardio...'):   # FIX: spinner now wraps the full prediction block
+        input_data = pd.DataFrame(
+            [[age, gender, height, weight, ap_hi, ap_lo, cholesterol, gluc, smoke, alco, active]],
+            columns=features
+        )
+        input_scaler = scaler.transform(input_data)
+        prediction = model.predict(input_scaler)
+
+        if prediction == 0:
+            st.write('NO Cardiovascular_Disease found!')
+            st.success('person is likely to be healthy')
+        else:
+            st.write('Cardiovascular_Disease found!')
+            st.error('person is likely to be Unhealthy')
