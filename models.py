@@ -10,7 +10,7 @@ df['age']=df['age']/365
 
 df_sample = df[
     (df['ap_hi'] >= 100) & (df['ap_hi'] <= 190) &
-    (df['ap_lo'] >= 50) & (df['ap_lo'] <= 90)
+    (df['ap_lo'] >= 50) & (df['ap_lo'] <= 99)
 ]
 
 
